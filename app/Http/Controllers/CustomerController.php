@@ -21,38 +21,50 @@ class CustomerController extends Controller
     // Callback dari Google 
     public function callback()
     {
+        try {
+            $socialUser = Socialite::driver('google')->user();
 
-        $socialUser = Socialite::driver('google')->user();
+            // Cek apakah email sudah terdaftar 
+            $registeredUser = User::where('email', $socialUser->email)->first();
 
-        // Cek apakah email sudah terdaftar 
-        $registeredUser = User::where('email', $socialUser->email)->first();
+            if (!$registeredUser) {
+                // Buat user baru 
+                $user = User::create([
+                    'nama' => $socialUser->name ?? $socialUser->nickname ?? 'Customer',
+                    'email' => $socialUser->email,
+                    'role' => '2', // Role customer 
+                    'status' => 1, // Status aktif 
+                    'password' => Hash::make(uniqid('pass_')),
+                ]);
 
-        if (!$registeredUser) {
-            // Buat user baru 
-            $user = User::create([
-                'nama' => $socialUser->name,
-                'email' => $socialUser->email,
-                'role' => '2', // Role customer 
-                'status' => 1, // Status aktif 
-                'password' => Hash::make('default_password'), // Password default 
-            ]);
+                // Buat data customer 
+                Customer::create([
+                    'user_id' => $user->id,
+                    'google_id' => $socialUser->id,
+                    'google_token' => $socialUser->token,
+                ]);
 
-            // Buat data customer 
-            Customer::create([
-                'user_id' => $user->id,
-                'google_id' => $socialUser->id,
-                'google_token' => $socialUser->token
-            ]);
+                // Login pengguna baru 
+                Auth::login($user);
+            } else {
+                // Pastikan data customer ada jika sebelumnya belum terbuat
+                Customer::firstOrCreate(
+                    ['user_id' => $registeredUser->id],
+                    [
+                        'google_id' => $socialUser->id,
+                        'google_token' => $socialUser->token,
+                    ]
+                );
 
-            // Login pengguna baru 
-            Auth::login($user);
-        } else {
-            // Jika email sudah terdaftar, langsung login 
-            Auth::login($registeredUser);
+                // Jika email sudah terdaftar, langsung login 
+                Auth::login($registeredUser);
+            }
+
+            // Redirect ke halaman utama 
+            return redirect()->route('beranda')->with('success', 'Berhasil masuk dengan akun Google!');
+        } catch (\Exception $e) {
+            return redirect()->route('beranda')->with('error', 'Gagal login via Google: ' . $e->getMessage());
         }
-
-        // Redirect ke halaman utama 
-        return redirect()->intended('beranda');
     }
 
     public function logout(Request $request)
@@ -106,7 +118,7 @@ public function updateAkun(Request $request, $id)
     ];
 
     if ($request->email != $customer->user->email) {
-        $rules['email'] = 'required|max:255|email|unique:users';
+        $rules['email'] = 'required|max:255|email|unique:user';
     }
 
     if ($request->alamat != $customer->alamat) {

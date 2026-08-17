@@ -1,545 +1,237 @@
 @extends('backend.v_layouts.app')
 @section('content')
-    <!-- contentAwal -->
 
+    <!-- WELCOME BANNER -->
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body border-top">
-                    <h5 class="card-title"> {{ $judul }}</h5>
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading"> Selamat Datang, {{ Auth::user()->nama }}</h4>
-                        Aplikasi Toko Online dengan hak akses yang anda miliki sebagai
-                        <b>
-                            @if (Auth::user()->role == 1)
-                                Super Admin
-                            @elseif(Auth::user()->role == 0)
-                                Admin
-                            @endif
-                        </b>
-                        ini adalah halaman utama dari aplikasi Web Programming. Studi Kasus
-                        Toko Online.
-                        <hr>
-                        <p class="mb-0">Kuliah..? BSI Aja !!!</p>
+            <div class="card" style="border-radius: 12px; overflow: hidden; background: linear-gradient(135deg, #064e3b 0%, #059669 100%); color: white; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 28px 32px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <span class="badge badge-pill badge-warning" style="font-size: 12px; padding: 6px 14px; text-transform: uppercase; font-weight: 700; color: #78350f; background: #fef08a; margin-bottom: 10px; display: inline-block;">
+                                <i class="fa fa-shield"></i> {{ Auth::user()->role == 1 ? 'Super Administrator' : 'Administrator Toko' }}
+                            </span>
+                            <h2 style="color: white; font-weight: 800; margin: 0 0 6px; font-size: 26px;">
+                                Selamat Datang Kembali, {{ Auth::user()->nama }}! 👋
+                            </h2>
+                            <p style="color: rgba(255,255,255,0.85); margin: 0; font-size: 14.5px;">
+                                Kelola katalog produk jajanan khas nusantara, pesanan masuk, dan pantau performa tokomu hari ini.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="{{ route('backend.produk.create') }}" class="btn btn-warning" style="font-weight: 700; border-radius: 8px; padding: 10px 18px;">
+                                <i class="fa fa-plus"></i> Tambah Produk
+                            </a>
+                            <a href="{{ route('beranda') }}" target="_blank" class="btn btn-outline-light" style="font-weight: 700; border-radius: 8px; padding: 10px 18px;">
+                                <i class="fa fa-external-link"></i> Buka Toko
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- contentAkhir -->
 
+    <!-- STAT METRIC CARDS -->
     <div class="row">
-        <!-- column -->
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Latest Posts</h4>
-                </div>
-                <div class="comment-widgets scrollable">
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row m-t-0">
-                        <div class="p-2">
-                            <img src="assets/images/users/1.jpg" alt="user" width="50" class="rounded-circle">
+        <!-- Card 1: Total Produk -->
+        <div class="col-md-3 col-sm-6">
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 22px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Total Menu Produk</div>
+                            <h3 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0;">{{ $totalProduk ?? 0 }}</h3>
                         </div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">James Anderson</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">April 14, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                            <i class="mdi mdi-food"></i>
                         </div>
                     </div>
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="p-2">
-                            <img src="assets/images/users/4.jpg" alt="user" width="50" class="rounded-circle">
-                        </div>
-                        <div class="comment-text active w-100">
-                            <h6 class="font-medium">Michael Jorden</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">May 10, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="p-2">
-                            <img src="assets/images/users/5.jpg" alt="user" width="50" class="rounded-circle">
-                        </div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">Johnathan Doeting</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">August 1, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
-                        </div>
+                    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12.5px;">
+                        <a href="{{ route('backend.produk.index') }}" style="color: #059669; font-weight: 600; text-decoration: none;">
+                            Kelola Produk &rarr;
+                        </a>
                     </div>
                 </div>
-            </div>
-            <!-- Card -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">To Do List</h4>
-                    <div class="todo-widget scrollable" style="height:450px;">
-                        <ul class="list-task todo-list list-group m-b-0" data-role="tasklist">
-                            <li class="list-group-item todo-item" data-role="task">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck">
-                                    <label class="custom-control-label todo-label" for="customCheck">
-                                        <span class="todo-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span>
-                                        <span class="badge badge-pill badge-danger float-right">Today</span>
-                                    </label>
-                                </div>
-                                <ul class="list-style-none assignedto">
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/1.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Steave">
-                                    </li>
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/2.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Jessica">
-                                    </li>
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka">
-                                    </li>
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="list-group-item todo-item" data-role="task">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                    <label class="custom-control-label todo-label" for="customCheck1">
-                                        <span class="todo-desc">Lorem Ipsum is simply dummy text of the printing</span>
-                                        <span class="badge badge-pill badge-primary float-right">1 week</span>
-                                    </label>
-                                </div>
-                                <div class="item-date">26 jun 2017</div>
-                            </li>
-                            <li class="list-group-item todo-item" data-role="task">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                    <label class="custom-control-label todo-label" for="customCheck2">
-                                        <span class="todo-desc">Give Purchase report to</span>
-                                        <span class="badge badge-pill badge-info float-right">Yesterday</span>
-                                    </label>
-                                </div>
-                                <ul class="list-style-none assignedto">
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka">
-                                    </li>
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina">
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="list-group-item todo-item" data-role="task">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck3">
-                                    <label class="custom-control-label todo-label" for="customCheck3">
-                                        <span class="todo-desc">Lorem Ipsum is simply dummy text of the printing</span>
-                                        <span class="badge badge-pill badge-warning float-right">2 weeks</span>
-                                    </label>
-                                </div>
-                                <div class="item-date">26 jun 2017</div>
-                            </li>
-                            <li class="list-group-item todo-item" data-role="task">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="customCheck4">
-                                    <label class="custom-control-label todo-label" for="customCheck4">
-                                        <span class="todo-desc">Give Purchase report to</span>
-                                        <span class="badge badge-pill badge-info float-right">Yesterday</span>
-                                    </label>
-                                </div>
-                                <ul class="list-style-none assignedto">
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka">
-                                    </li>
-                                    <li class="assignee">
-                                        <img class="rounded-circle" width="40" src="assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina">
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <!-- card -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title m-b-0">Progress Box</h4>
-                    <div class="m-t-20">
-                        <div class="d-flex no-block align-items-center">
-                            <span>81% Clicks</span>
-                            <div class="ml-auto">
-                                <span>125</span>
-                            </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 81%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="d-flex no-block align-items-center m-t-25">
-                            <span>72% Uniquie Clicks</span>
-                            <div class="ml-auto">
-                                <span>120</span>
-                            </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 72%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="d-flex no-block align-items-center m-t-25">
-                            <span>53% Impressions</span>
-                            <div class="ml-auto">
-                                <span>785</span>
-                            </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 53%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="d-flex no-block align-items-center m-t-25">
-                            <span>3% Online Users</span>
-                            <div class="ml-auto">
-                                <span>8</span>
-                            </div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 3%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- card new -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title m-b-0">News Updates</h4>
-                </div>
-                <ul class="list-style-none">
-                    <li class="d-flex no-block card-body">
-                        <i class="fa fa-check-circle w-30px m-t-5"></i>
-                        <div>
-                            <a href="#" class="m-b-0 font-medium p-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</a>
-                            <span class="text-muted">dolor sit amet, consectetur adipiscing</span>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <h5 class="text-muted m-b-0">20</h5>
-                                <span class="text-muted font-16">Jan</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <i class="fa fa-gift w-30px m-t-5"></i>
-                        <div>
-                            <a href="#" class="m-b-0 font-medium p-0">Congratulation Maruti, Happy Birthday</a>
-                            <span class="text-muted">many many happy returns of the day</span>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <h5 class="text-muted m-b-0">11</h5>
-                                <span class="text-muted font-16">Jan</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <i class="fa fa-plus w-30px m-t-5"></i>
-                        <div>
-                            <a href="#" class="m-b-0 font-medium p-0">Maruti is a Responsive Admin theme</a>
-                            <span class="text-muted">But already everything was solved. It will ...</span>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <h5 class="text-muted m-b-0">19</h5>
-                                <span class="text-muted font-16">Jan</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <i class="fa fa-leaf w-30px m-t-5"></i>
-                        <div>
-                            <a href="#" class="m-b-0 font-medium p-0">Envato approved Maruti Admin template</a>
-                            <span class="text-muted">i am very happy to approved by TF</span>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <h5 class="text-muted m-b-0">20</h5>
-                                <span class="text-muted font-16">Jan</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex no-block card-body border-top">
-                        <i class="fa fa-question-circle w-30px m-t-5"></i>
-                        <div>
-                            <a href="#" class="m-b-0 font-medium p-0">I am alwayse here if you have any question</a>
-                            <span class="text-muted">we glad that you choose our template</span>
-                        </div>
-                        <div class="ml-auto">
-                            <div class="tetx-right">
-                                <h5 class="text-muted m-b-0">15</h5>
-                                <span class="text-muted font-16">Jan</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
-        <!-- column -->
-    
-        <div class="col-lg-6">
-            <!-- Card -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Chat Option</h4>
-                    <div class="chat-box scrollable" style="height:475px;">
-                        <!--chat Row -->
-                        <ul class="chat-list">
-                            <!--chat Row -->
-                            <li class="chat-item">
-                                <div class="chat-img"><img src="assets/images/users/1.jpg" alt="user"></div>
-                                <div class="chat-content">
-                                    <h6 class="font-medium">James Anderson</h6>
-                                    <div class="box bg-light-info">Lorem Ipsum is simply dummy text of the printing &amp; type setting industry.</div>
-                                </div>
-                                <div class="chat-time">10:56 am</div>
-                            </li>
-                            <!--chat Row -->
-                            <li class="chat-item">
-                                <div class="chat-img"><img src="assets/images/users/2.jpg" alt="user"></div>
-                                <div class="chat-content">
-                                    <h6 class="font-medium">Bianca Doe</h6>
-                                    <div class="box bg-light-info">It's Great opportunity to work.</div>
-                                </div>
-                                <div class="chat-time">10:57 am</div>
-                            </li>
-                            <!--chat Row -->
-                            <li class="odd chat-item">
-                                <div class="chat-content">
-                                    <div class="box bg-light-inverse">I would love to join the team.</div>
-                                    <br>
-                                </div>
-                            </li>
-                            <!--chat Row -->
-                            <li class="odd chat-item">
-                                <div class="chat-content">
-                                    <div class="box bg-light-inverse">Whats budget of the new project.</div>
-                                    <br>
-                                </div>
-                                <div class="chat-time">10:59 am</div>
-                            </li>
-                            <!--chat Row -->
-                            <li class="chat-item">
-                                <div class="chat-img"><img src="assets/images/users/3.jpg" alt="user"></div>
-                                <div class="chat-content">
-                                    <h6 class="font-medium">Angelina Rhodes</h6>
-                                    <div class="box bg-light-info">Well we have good budget for the project</div>
-                                </div>
-                                <div class="chat-time">11:00 am</div>
-                            </li>
-                            <!--chat Row -->
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-body border-top">
-                    <div class="row">
-                        <div class="col-9">
-                            <div class="input-field m-t-0 m-b-0">
-                                <textarea id="textarea1" placeholder="Type and enter" class="form-control border-0"></textarea>
-                            </div>
+
+        <!-- Card 2: Total Kategori -->
+        <div class="col-md-3 col-sm-6">
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 22px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Kategori Makanan</div>
+                            <h3 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0;">{{ $totalKategori ?? 0 }}</h3>
                         </div>
-                        <div class="col-3">
-                            <a class="btn-circle btn-lg btn-cyan float-right text-white" href="javascript:void(0)"><i class="fas fa-paper-plane"></i></a>
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                            <i class="mdi mdi-tag-multiple"></i>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!-- card -->
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Our partner (Box with Fix height)</h4>
-                </div>
-                <div class="comment-widgets scrollable" style="max-height: 130px;">
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row m-t-0">
-                        <div class="p-2"><img src="assets/images/users/1.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">James Anderson</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">April 14, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="p-2"><img src="assets/images/users/4.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text active w-100">
-                            <h6 class="font-medium">Michael Jorden</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">May 10, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Comment Row -->
-                    <div class="d-flex flex-row comment-row">
-                        <div class="p-2"><img src="assets/images/users/5.jpg" alt="user" width="50" class="rounded-circle"></div>
-                        <div class="comment-text w-100">
-                            <h6 class="font-medium">Johnathan Doeting</h6>
-                            <span class="m-b-15 d-block">Lorem Ipsum is simply dummy text of the printing and type setting industry.</span>
-                            <div class="comment-footer">
-                                <span class="text-muted float-right">August 1, 2016</span>
-                                <button type="button" class="btn btn-cyan btn-sm">Edit</button>
-                                <button type="button" class="btn btn-success btn-sm">Publish</button>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- accoridan part -->
-            <div class="accordion" id="accordionExample">
-                <div class="card m-b-0">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="m-r-5 fa fa-magnet" aria-hidden="true"></i>
-                                <span>Accordion Example 1</span>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                        <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                    </div>
-                </div>
-                <div class="card m-b-0 border-top">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0">
-                            <a class="collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="m-r-5 fa fa-magnet" aria-hidden="true"></i>
-                                <span>Accordion Example 2</span>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                        <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                    </div>
-                </div>
-                <div class="card m-b-0 border-top">
-                    <div class="card-header" id="headingThree">
-                        <h5 class="mb-0">
-                            <a class="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="m-r-5 fa fa-magnet" aria-hidden="true"></i>
-                                <span>Accordion Example 3</span>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                        <div class="card-body">
-                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- toggle part -->
-            <div id="accordian-4">
-                <div class="card m-t-30">
-                    <a class="card-header link" data-toggle="collapse" data-parent="#accordian-4" href="#Toggle-1" aria-expanded="true" aria-controls="Toggle-1">
-                        <i class="seticon fa fa-arrow-right" aria-hidden="true"></i>
-                        <span>Toggle, Open by default</span>
-                    </a>
-                    <div id="Toggle-1" class="collapse show multi-collapse">
-                        <div class="card-body widget-content">
-                            This box is opened by default, paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.
-                        </div>
-                    </div>
-                    <a class="card-header link border-top" data-toggle="collapse" data-parent="#accordian-4" href="#Toggle-2" aria-expanded="false" aria-controls="Toggle-2">
-                        <i class="seticon fa fa-times" aria-hidden="true"></i>
-                        <span>Toggle, Closed by default</span>
-                    </a>
-                    <div id="Toggle-2" class="multi-collapse collapse" style="">
-                        <div class="card-body widget-content">
-                            This box is now open
-                        </div>
-                    </div>
-                    <a class="card-header collapsed link border-top" data-toggle="collapse" data-parent="#accordian-4" href="#Toggle-3" aria-expanded="false" aria-controls="Toggle-3">
-                        <i class="seticon fa fa-times" aria-hidden="true"></i>
-                        <span>Toggle, Closed by default</span>
-                    </a>
-                    <div id="Toggle-3" class="collapse multi-collapse">
-                        <div class="card-body widget-content">
-                            This box is now open
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Tabs -->
-            <div class="card">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" href="#home" role="tab">
-                            <span class="hidden-sm-up"></span>
-                            <span class="hidden-xs-down">Tab1</span>
+                    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12.5px;">
+                        <a href="{{ route('backend.kategori.index') }}" style="color: #2563eb; font-weight: 600; text-decoration: none;">
+                            Kelola Kategori &rarr;
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
-                            <span class="hidden-sm-up"></span>
-                            <span class="hidden-xs-down">Tab2</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#messages" role="tab">
-                            <span class="hidden-sm-up"></span>
-                            <span class="hidden-xs-down">Tab3</span>
-                        </a>
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content tabcontent-border">
-                    <div class="tab-pane active" id="home" role="tabpanel">
-                        <div class="p-20">
-                            <p>And is full of waffle to It has multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment..</p>
-                            <img src="assets/images/background/img4.jpg" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Total Pelanggan -->
+        <div class="col-md-3 col-sm-6">
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 22px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Total Pelanggan</div>
+                            <h3 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0;">{{ $totalCustomer ?? 0 }}</h3>
+                        </div>
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: #faf5ff; color: #9333ea; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                            <i class="mdi mdi-account-group"></i>
                         </div>
                     </div>
-                    <div class="tab-pane p-20" id="profile" role="tabpanel">
-                        <div class="p-20">
-                            <img src="assets/images/background/img4.jpg" class="img-fluid">
-                            <p class="m-t-10">And is full of waffle to It has multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment..</p>
+                    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12.5px;">
+                        <a href="{{ route('backend.customer.index') }}" style="color: #9333ea; font-weight: 600; text-decoration: none;">
+                            Data Customer &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Total Pesanan Masuk -->
+        <div class="col-md-3 col-sm-6">
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 22px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Pesanan Masuk</div>
+                            <h3 style="font-size: 28px; font-weight: 800; color: #0f172a; margin: 0;">{{ $totalPesanan ?? 0 }}</h3>
+                        </div>
+                        <div style="width: 52px; height: 52px; border-radius: 12px; background: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                            <i class="mdi mdi-cart"></i>
                         </div>
                     </div>
-                    <div class="tab-pane p-20" id="messages" role="tabpanel">
-                        <div class="p-20">
-                            <p>And is full of waffle to It has multiple paragraphs and is full of waffle to pad out the comment. Usually, you just wish these sorts of comments would come to an end.multiple paragraphs and is full of waffle to pad out the comment..</p>
-                            <img src="assets/images/background/img4.jpg" class="img-fluid">
-                        </div>
+                    <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12.5px;">
+                        <a href="{{ route('backend.pesanan.proses') }}" style="color: #d97706; font-weight: 600; text-decoration: none;">
+                            Proses Pesanan &rarr;
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- RECENT TRANSACTIONS TABLE & SHORTCUTS -->
+    <div class="row">
+        <!-- RECENT ORDERS TABLE (COL-MD-8) -->
+        <div class="col-lg-8 col-md-12">
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.04); margin-bottom: 24px;">
+                <div class="card-body" style="padding: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+                        <h4 class="card-title" style="margin: 0; font-weight: 800; color: #0f172a;">
+                            <i class="mdi mdi-receipt" style="color: #059669;"></i> Transaksi Pesanan Terbaru
+                        </h4>
+                        <a href="{{ route('backend.pesanan.proses') }}" class="btn btn-sm btn-outline-success" style="font-weight: 600; border-radius: 6px;">
+                            Lihat Semua
+                        </a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Pelanggan</th>
+                                    <th>Tanggal</th>
+                                    <th>Total Bayar</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($pesananTerbaru as $order)
+                                    <tr>
+                                        <td><strong>#{{ $order->id }}</strong></td>
+                                        <td>{{ $order->customer->user->nama ?? '-' }}</td>
+                                        <td>{{ $order->created_at->format('d M, H:i') }}</td>
+                                        <td style="font-weight: 700; color: #059669;">
+                                            Rp. {{ number_format($order->total_harga + ($order->biaya_ongkir ?? 0), 0, ',', '.') }}
+                                        </td>
+                                        <td>
+                                            @if ($order->status == 'Paid')
+                                                <span class="badge badge-primary">Diproses</span>
+                                            @elseif ($order->status == 'Kirim')
+                                                <span class="badge badge-info">Dikirim</span>
+                                            @elseif ($order->status == 'Selesai')
+                                                <span class="badge badge-success">Selesai</span>
+                                            @else
+                                                <span class="badge badge-warning text-white">{{ $order->status }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="text-right">
+                                            <a href="{{ route('backend.pesanan.detail', $order->id) }}" class="btn btn-sm btn-cyan" title="Detail">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center" style="padding: 24px; color: #94a3b8;">
+                                            Belum ada transaksi pesanan yang tercatat.
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK SHORTCUTS & REVENUE CARD (COL-MD-4) -->
+        <div class="col-lg-4 col-md-12">
+            <!-- Total Revenue Box -->
+            <div class="card" style="border-radius: 12px; border: none; background: #0f172a; color: white; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);">
+                <div class="card-body" style="padding: 24px;">
+                    <div style="font-size: 12.5px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">
+                        Total Pendapatan Transaksi Selesai
+                    </div>
+                    <h2 style="color: #34d399; font-weight: 800; font-size: 26px; margin: 0 0 16px;">
+                        Rp. {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}
+                    </h2>
+                    <a href="{{ route('backend.laporan.formselesai') }}" class="btn btn-sm btn-success" style="font-weight: 700; border-radius: 6px; width: 100%;">
+                        <i class="fas fa-print"></i> Cetak Rekap Pendapatan
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="card" style="border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 24px;">
+                <div class="card-body" style="padding: 24px;">
+                    <h5 class="card-title" style="font-weight: 800; margin-bottom: 16px; color: #0f172a;">Akses Cepat Pengelolaan</h5>
+                    <div class="list-group list-group-flush">
+                        <a href="{{ route('backend.produk.create') }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                            <span><i class="mdi mdi-plus-box text-success mr-2"></i> Tambah Produk Baru</span>
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                        <a href="{{ route('backend.kategori.create') }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                            <span><i class="mdi mdi-tag-plus text-primary mr-2"></i> Tambah Kategori Baru</span>
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                        <a href="{{ route('backend.laporan.formproses') }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                            <span><i class="mdi mdi-file-document-box text-warning mr-2"></i> Laporan Pesanan Proses</span>
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                        <a href="{{ route('backend.user.index') }}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">
+                            <span><i class="mdi mdi-account-key text-info mr-2"></i> Kelola Hak Akses Admin</span>
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection

@@ -17,7 +17,7 @@ class ImageHelper {
         }
 
         if (!is_dir($destinationPath)) {
-            throw new \Exception('Direktori tujuan tidak ditemukan: ' . $destinationPath);
+            mkdir($destinationPath, 0755, true);
         }
 
         if (!$file->isValid()) {

@@ -1,168 +1,188 @@
 <!DOCTYPE html>
-<html dir="ltr">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/image/icon_univ_bsi.png') }}">
-    <title>tokoonline</title>
-    <!-- Custom CSS -->
+    <title>Login Administrator - Toko Online Makanan</title>
+
+    <!-- Google Font Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap & Font Awesome -->
     <link href="{{ asset('backend/dist/css/style.min.css') }}" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.min.css') }}">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: radial-gradient(circle at top right, #064e3b 0%, #0f172a 60%, #020617 100%) !important;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .login-card-modern {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 36px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .login-brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .login-brand-icon {
+            width: 56px;
+            height: 56px;
+            background: #ecfdf5;
+            color: #059669;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin: 0 auto 14px;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2);
+        }
+        .login-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 6px;
+            letter-spacing: -0.02em;
+        }
+        .login-subtitle {
+            font-size: 13.5px;
+            color: #64748b;
+            margin: 0;
+        }
+        .form-label-modern {
+            font-weight: 700;
+            font-size: 13px;
+            color: #334155;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .input-group-modern {
+            position: relative;
+            margin-bottom: 18px;
+        }
+        .input-group-modern i {
+            position: absolute;
+            left: 14px;
+            top: 14px;
+            color: #94a3b8;
+            font-size: 15px;
+            z-index: 5;
+        }
+        .form-control-modern {
+            width: 100%;
+            padding: 12px 14px 12px 42px !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 10px !important;
+            font-size: 14px !important;
+            font-family: inherit !important;
+            color: #0f172a !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box;
+        }
+        .form-control-modern:focus {
+            outline: none !important;
+            border-color: #059669 !important;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15) !important;
+        }
+        .btn-login-modern {
+            width: 100%;
+            padding: 13px;
+            background: #059669;
+            border: 1px solid #059669;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-login-modern:hover {
+            background: #047857;
+            transform: translateY(-1px);
+            box-shadow: 0 14px 20px -3px rgba(5, 150, 105, 0.4);
+        }
+        .alert-login {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        <div class="preloader">
-            <div class="lds-ripple">
-                <div class="lds-pos"></div>
-                <div class="lds-pos"></div>
+    <div class="login-card-modern">
+        <div class="login-brand">
+            <div class="login-brand-icon">
+                <i class="fa fa-cutlery"></i>
             </div>
+            <h2 class="login-title">Administrator Portal</h2>
+            <p class="login-subtitle">Masuk untuk mengelola produk, pesanan, dan laporan toko</p>
         </div>
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Login box.scss -->
-        <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
-            <div class="auth-box bg-dark border-top border-secondary">
-                <div id="loginform">
-                    <div class="text-center p-t-20 p-b-20">
-                        <span class="db"><img src="{{ asset('backend/image/logo.png') }}" alt="logo" /></span>
-                    </div>
-                    <!-- Form -->
-                    <!-- error -->
-                    @if(session()->has('error'))
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>{{ session('error')}} </strong>
-                    </div>
-                    @endif
-                    <!-- errorEnd -->
-                    <form class="form-horizontal m-t-20" id="loginform" action="{{ route('backend.login') }}" method="post">
-                    @csrf
-                        <div class="row p-b-30">
-                            <div class="col-12">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text bg-success text-white" id="basic-addon1"><i class="ti-user"></i></span>
-                                    </div>
-                                    <input type="text" name="email"value="{{old('email')}}" class="form-control form-control-lg @error('email') is-invalid 
-                                        @enderror" placeholder="Masukkan Email" aria-label="Username" aria-describedby="basic-addon1">
-                                            @error('email')
-                                                <span class="invalid-feedback alert-danger"role="alert">
-                                                    {{$message}}
-                                                </span>
-                                            @enderror
-                                </div>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
-                                </div>
-                                <input type="password" name="password" class="form-control form-control-lg @error('password') is-invalid @enderror" placeholder="Masukkan Password" aria-label="Password" aria-describedby="basic-addon1">
-                                    @error('password')
-                                        <span class="invalid-feedback alert-danger"role="alert">
-                                            {{$message}}
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row border-top border-secondary">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <div class="p-t-20">
-                                        <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> lupa password?</button>
-                                        <button class="btn btn-success float-right" type="submit">Login</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div id="recoverform">
-                    <div class="text-center">
-                        <span class="text-white">Enter your e-mail address below and we will send you instructions how to recover a password.</span>
-                    </div>
-                    <div class="row m-t-20">
-                        <!-- Form -->
-                        <form class="col-12" action="index.html">
-                            <!-- email -->
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-danger text-white" id="basic-addon1"><i class="ti-email"></i></span>
-                                </div>
-                                <input type="text" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1">
-                            </div>
-                            <!-- pwd -->
-                            <div class="row m-t-20 p-t-20 border-top border-secondary">
-                                <div class="col-12">
-                                    <a class="btn btn-success" href="#" id="to-login" name="action">Back To Login</a>
-                                    <button class="btn btn-info float-right" type="button" name="action">Recover</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- Login box.scss -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper scss in scafholding.scss -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper scss in scafholding.scss -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Right Sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Right Sidebar -->
-        <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- All Required js -->
-    <!-- ============================================================== -->
-    <script src="{{ asset('backend/libs/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{ asset('backend/libs/popper.js/dist/umd/popper.min.js') }}"></script>
-    <script src="{{ asset('backend/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- ============================================================== -->
-    <!-- This page plugin js -->
-    <!-- ============================================================== -->
-    <script>
-        $('[data-toggle="tooltip"]').tooltip();
-        $(".preloader").fadeOut();
-        // ============================================================== 
-        // Login and Recover Password 
-        // ============================================================== 
-        $('#to-recover').on("click", function() {
-            $("#loginform").slideUp();
-            $("#recoverform").fadeIn();
-        });
-        $('#to-login').click(function(){
-        
-            $("#recoverform").hide();
-            $("#loginform").fadeIn();
-        });
-    </script>
 
+        @if(session()->has('error'))
+            <div class="alert-login">
+                <i class="fa fa-exclamation-circle"></i>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
+        <form action="{{ route('backend.login.post') }}" method="post">
+            @csrf
+            <div class="form-group" style="margin-bottom: 16px;">
+                <label class="form-label-modern">Alamat Email</label>
+                <div class="input-group-modern">
+                    <i class="fa fa-envelope-o"></i>
+                    <input type="email" name="email" value="{{ old('email') }}" class="form-control-modern" placeholder="admin@gmail.com" required autocomplete="email" autofocus>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label class="form-label-modern">Password</label>
+                <div class="input-group-modern">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="password" class="form-control-modern" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login-modern">
+                <span>Masuk ke Dashboard</span>
+                <i class="fa fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 12.5px; color: #94a3b8; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+            &copy; {{ date('Y') }} Toko Online Makanan Nusantara
+        </div>
+    </div>
 </body>
 
 </html>

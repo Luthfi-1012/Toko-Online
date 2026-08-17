@@ -1,462 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('frontend/img/icon_univ_bsi.png') }}">
-    <title>tokoonline</title>
+    <title>{{ $judul ?? 'Toko Online Makanan Nusantara' }} - Kuliner Khas Indonesia</title>
 
-    <!-- Google font -->
-    <link href="https://fonts.googleapis.com/css?family=Hind:400,700" rel="stylesheet">
+    <!-- Google Font Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap -->
+    <!-- Bootstrap & Font Awesome -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/bootstrap.min.css') }}">
-
-    <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick.css') }}">
-    <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/slick-theme.css') }}">
-
-    <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/nouislider.min.css') }}">
-
-    <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="{{ asset('frontend/css/font-awesome.min.css') }}">
 
-    <!-- Custom stlylesheet -->
+    <!-- Original CSS & Modern Design System -->
     <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('frontend/css/modern-custom.css') }}">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
+    <!-- Midtrans Snap JS -->
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 </head>
 
 <body>
-    <!-- HEADER -->
-    <header>
-        <!-- top Header -->
-        <div id="top-header">
-            <div class="container">
-                <div class="text-center" class="pull-left">
-                    <strong>Selamat datang di toko online</strong>
-                </div>
+    <!-- TOP NOTIFICATION BAR -->
+    <div id="top-header">
+        <div class="container">
+            <div class="text-center">
+                <span>🍃 <strong>Pusat Oleh-Oleh & Jajanan Tradisional Khas Nusantara</strong> — Pengiriman Cepat & Terpercaya</span>
             </div>
         </div>
-        <!-- /top Header -->
+    </div>
 
-        <!-- header -->
-        <div id="header">
-            <div class="container">
-                <div class="pull-left">
-                    <!-- Logo -->
-                    <div class="header-logo">
-                        <a class="logo" href="#">
-                            <img src="{{ asset('frontend/img/logo.png') }}" alt="">
+    <!-- MAIN HEADER -->
+    <header id="header">
+        <div class="container">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                <!-- Brand Logo -->
+                <div class="header-logo">
+                    <a class="brand-title" href="{{ route('beranda') }}">
+                        <i class="fa fa-cutlery"></i>
+                        <span>Toko<strong style="color: var(--primary);">Makanan</strong></span>
+                    </a>
+                </div>
+
+                <!-- Right Actions (Cart & Account) -->
+                <ul class="header-btns">
+                    <!-- Cart Button -->
+                    @php
+                        $cartCount = 0;
+                        if (Auth::check() && Auth::user()->role == 2) {
+                            $pendingOrder = \App\Models\Order::where('user_id', Auth::id())->where('status', 'pending')->first();
+                            if ($pendingOrder) {
+                                $cartCount = $pendingOrder->orderItems->sum('quantity');
+                            }
+                        }
+                    @endphp
+                    <li>
+                        <a href="{{ route('order.cart') }}" class="header-pill-btn btn-accent">
+                            <i class="fa fa-shopping-basket"></i>
+                            <span>Keranjang</span>
+                            @if($cartCount > 0)
+                                <span class="badge" style="background: #ffffff; color: var(--primary); font-weight: 800; border-radius: 10px; margin-left: 4px;">{{ $cartCount }}</span>
+                            @endif
                         </a>
-                    </div>
-                    <!-- /Logo -->
+                    </li>
 
-                    <!-- Search -->
-
-                    <!-- /Search -->
-                </div>
-                <div class="pull-right">
-                    <ul class="header-btns">
-
-                        <!-- Keranjang di atas -->
-                        <li class="header-cart">
-                            <a href="{{ route('order.cart') }}">
-                                <div class="header-btns-icon">
-                                    <i class="fa fa-shopping-cart"></i>
-                                </div>
-                                <strong class="text-uppercase">Keranjang</strong>
+                    <!-- Account / Login -->
+                    @if (Auth::check())
+                        <li class="header-account dropdown default-dropdown">
+                            <div class="header-pill-btn dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user-circle"></i>
+                                <span>{{ Auth::user()->nama }}</span>
+                                <i class="fa fa-angle-down"></i>
+                            </div>
+                            <ul class="dropdown-menu dropdown-menu-right custom-menu">
+                                <li>
+                                    <a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}">
+                                        <i class="fa fa-user"></i> Akun Profil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('order.history') }}">
+                                        <i class="fa fa-history"></i> Riwayat Pesanan
+                                    </a>
+                                </li>
+                                <li class="divider" style="margin: 4px 0;"></li>
+                                <li>
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('keluar-app').submit();" style="color: #dc2626 !important;">
+                                        <i class="fa fa-sign-out" style="color: #dc2626;"></i> Keluar
+                                    </a>
+                                    <form id="keluar-app" action="{{ route('customer.logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li>
+                            <a href="{{ route('auth.redirect') }}" class="header-pill-btn">
+                                <i class="fa fa-google"></i>
+                                <span>Masuk / Daftar</span>
                             </a>
                         </li>
-
-                        {{-- dari modul bsi --}}
-                        {{-- <li class="header-cart dropdown default-dropdown">
-                            <a  class="dropdown-toggle" data-toggle="dropdown" aria
-                                expanded="true">
-                                <div class="header-btns-icon">
-                                    x   
-                                    <i  class="fa fa-shopping-cart"> </i>
-                                </div>
-                                <strong class="text-uppercase">Keranjang</strong>
-                            </a>
-                        </li> --}}
-                        <!-- /akhir dari keranjang -->
-
-                        <!-- Untuk akun -->
-                        @if (Auth::check())
-                            <!-- Account -->
-                            <li class="header-account dropdown default-dropdown">
-                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
-                                    <div class="header-btns-icon">
-                                        <i class="fa fa-user-o"></i>
-                                    </div>
-                                    <strong class="text-uppercase">{{ Auth::user()->nama }}<i
-                                            class="fa fa-caret-down"></i></strong>
-                                </div>
-                                <ul class="custom-menu">
-                                    <li><a href="{{ route('customer.akun', ['id' => Auth::user()->id]) }}"><i
-                                                class="fa fa-user-o"></i> Akun Saya</a>
-                                    </li>
-                                    <li><a href="{{ route('order.history') }}"><i class="fa fa-check"></i> History</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            onclick="event.preventDefault(); document.getElementById('keluar-app').submit();"><i
-                                                class="fa fa-power-off"></i> Keluar
-                                        </a>
-                                        <!-- form keluar app -->
-                                        <form id="keluar-app" action="{{ route('customer.logout') }}"
-                                            method="POST"class="d-none">
-                                            @csrf
-                                        </form>
-                                        <!-- form keluar app end -->
-                                    </li>
-                                </ul>
-                            </li>
-                        @else
-                            <li class="header-account dropdown default-dropdown">
-                                <div class="dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="true">
-                                    <div class="header-btns-icon">
-                                        <i class="fa fa-user-o"></i>
-                                    </div>
-                                    <strong class="text-uppercase">Akun Saya<i class="fa fa-caret-down"></i></strong>
-                                </div>
-                                <a href="{{ route('auth.redirect') }}" class="text-uppercase">Login</a>
-                            </li>
-                            <!-- /Account -->
-                        @endif
-
-
-                        <!-- /Account -->
-
-                        <!-- Mobile nav toggle-->
-                        <li class="nav-toggle">
-                            <button class="nav-toggle-btn main-btn icon-btn"><i class="fa fa-bars"></i></button>
-                        </li>
-                        <!-- / Mobile nav toggle -->
-                    </ul>
-                </div>
+                    @endif
+                </ul>
             </div>
-            <!-- header -->
         </div>
-        <!-- container -->
     </header>
-    <!-- /HEADER -->
 
-    <!-- NAVIGATION -->
+    <!-- NAVIGATION MENU -->
     <div id="navigation">
-        <!-- container -->
         <div class="container">
-            <div id="responsive-nav">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
                 @php
-                    $kategori = DB::table('kategori')->orderBy('nama_kategori', 'asc')->get();
+                    $kategoriList = DB::table('kategori')->orderBy('nama_kategori', 'asc')->get();
                 @endphp
-                @if (request()->segment(1) == '' || request()->segment(1) == 'beranda')
-                    <!-- category nav -->
-                    <div class="category-nav show-on-click">
-                        <span class="category-header">kategori <i class="fa fa-list"></i></span>
-                        <ul class="category-list">
-                            @foreach ($kategori as $row)
-                                <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a>
-                                </li>
+                <ul class="menu-list">
+                    <li class="{{ request()->routeIs('beranda') ? 'active' : '' }}"><a href="{{ route('beranda') }}"><i class="fa fa-home"></i> Beranda</a></li>
+                    <li class="{{ request()->routeIs('produk.all') ? 'active' : '' }}"><a href="{{ route('produk.all') }}"><i class="fa fa-th-large"></i> Semua Produk</a></li>
+                    
+                    <!-- Dropdown Kategori -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-tags"></i> Kategori <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu custom-menu">
+                            @foreach ($kategoriList as $k)
+                                <li><a href="{{ route('produk.kategori', $k->id) }}">{{ $k->nama_kategori }}</a></li>
                             @endforeach
                         </ul>
+                    </li>
+                </ul>
 
-                        <ul class="category-list">
-                    </div>
-                @else
-                    <div class="category-nav show-on-click">
-                        <span class="category-header">Kategori <i class="fa fa-list"></i></span>
-                        <ul class="category-list">
-                            @foreach ($kategori as $row)
-                                <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a>
+                <div class="hidden-xs" style="font-size: 13px; color: var(--text-muted); font-weight: 500;">
+                    <i class="fa fa-shield text-success"></i> 100% Produk Halal & Higienis
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN BODY SECTION -->
+    <div class="section" style="padding-top: 10px; min-height: 50vh;">
+        <div class="container">
+            @php
+                $isCatalogPage = request()->routeIs('beranda') || request()->routeIs('produk.all') || request()->routeIs('produk.kategori');
+            @endphp
+
+            @if ($isCatalogPage)
+                <!-- Catalog Layout: Sidebar Kategori (col-md-3) + Content (col-md-9) -->
+                <div class="row">
+                    <!-- ASIDE CATEGORY FILTER -->
+                    <div class="col-md-3 col-sm-4">
+                        <div class="sidebar-modern-card">
+                            <h4 class="sidebar-modern-title"><i class="fa fa-filter"></i> Kategori Produk</h4>
+                            <ul class="category-modern-list">
+                                <li class="{{ request()->routeIs('produk.all') || (request()->routeIs('beranda') && !request()->segment(3)) ? 'active' : '' }}">
+                                    <a href="{{ route('produk.all') }}">
+                                        <span>Semua Kategori</span>
+                                        <i class="fa fa-angle-right"></i>
+                                    </a>
                                 </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <!-- /category nav -->
-                @endif
-                <!-- menu nav -->
-                <div class="menu-nav">
-                    <span class="menu-header">Menu <i class="fa fa-bars"></i></span>
-                    <ul class="menu-list">
-                        <li><a href="{{ route('beranda') }}">Beranda</a></li>
-                        <li><a href="{{ route('produk.all') }}">Produk</a></li>
-                        <li><a href="#">Lokasi</a></li>
-                        <li><a href="#">Hubungi Kami</a></li>
+                                @foreach ($kategoriList as $row)
+                                    <li class="{{ request()->segment(3) == $row->id ? 'active' : '' }}">
+                                        <a href="{{ route('produk.kategori', $row->id) }}">
+                                            <span>{{ $row->nama_kategori }}</span>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
 
+                        <!-- Benefit Box -->
+                        <div class="sidebar-modern-card" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #bbf7d0;">
+                            <div style="font-size: 24px; color: var(--primary); margin-bottom: 8px;"><i class="fa fa-truck"></i></div>
+                            <h5 style="font-weight: 700; color: #166534; margin-bottom: 6px;">Jangkauan Kirim Luas</h5>
+                            <p style="font-size: 13px; color: #15803d; margin: 0;">Mendukung ekspedisi JNE, TIKI, dan POS ke seluruh penjuru kota di Indonesia.</p>
+                        </div>
+                    </div>
+
+                    <!-- MAIN CONTENT -->
+                    <div class="col-md-9 col-sm-8">
+                        @yield('content')
+                    </div>
+                </div>
+            @else
+                <!-- Full-Width Layout for Cart, Checkout, Detail, History, Profile -->
+                <div class="row">
+                    <div class="col-12 col-md-12">
+                        @yield('content')
+                    </div>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- MODERN FOOTER -->
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <!-- Brand & Bio -->
+                <div class="col-md-4 col-sm-6" style="margin-bottom: 24px;">
+                    <a class="brand-title" href="#" style="color: #fff; font-size: 22px; margin-bottom: 14px; display: inline-block;">
+                        <i class="fa fa-cutlery" style="color: var(--accent);"></i>
+                        <span>Toko<strong style="color: #34d399;">Makanan</strong></span>
+                    </a>
+                    <p style="font-size: 14px; line-height: 1.7; color: #94a3b8;">
+                        Pusat jajanan tradisional dan aneka makanan nusantara berkualitas. Dibuat dengan cita rasa otentik khas Indonesia yang higienis, lezat, dan terpercaya.
+                    </p>
+                </div>
+
+                <!-- Navigasi Belanja -->
+                <div class="col-md-3 col-sm-6" style="margin-bottom: 24px;">
+                    <h4 class="footer-header">Navigasi Belanja</h4>
+                    <ul class="list-links" style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 8px;"><a href="{{ route('beranda') }}">Beranda Toko</a></li>
+                        <li style="margin-bottom: 8px;"><a href="{{ route('produk.all') }}">Katalog Produk</a></li>
+                        <li style="margin-bottom: 8px;"><a href="{{ route('order.cart') }}">Keranjang Belanja</a></li>
+                        <li style="margin-bottom: 8px;"><a href="{{ route('order.history') }}">Riwayat Pesanan</a></li>
                     </ul>
                 </div>
-                <!-- menu nav -->
+
+                <!-- Kategori Pilihan -->
+                <div class="col-md-2 col-sm-6" style="margin-bottom: 24px;">
+                    <h4 class="footer-header">Kategori</h4>
+                    <ul class="list-links" style="list-style: none; padding: 0;">
+                        @foreach ($kategoriList->take(4) as $k)
+                            <li style="margin-bottom: 8px;"><a href="{{ route('produk.kategori', $k->id) }}">{{ $k->nama_kategori }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Kontak & Info Pengembang -->
+                <div class="col-md-3 col-sm-6" style="margin-bottom: 24px;">
+                    <h4 class="footer-header">Informasi</h4>
+                    <p style="font-size: 13.5px; color: #94a3b8; margin-bottom: 8px;">
+                        <strong>Mata Kuliah:</strong> Web Programming III<br>
+                        <strong>Project:</strong> E-Commerce Toko Makanan
+                    </p>
+                    <div style="margin-top: 14px;">
+                        <span class="badge" style="background: rgba(255,255,255,0.1); padding: 8px 12px; font-weight: 500;">
+                            <i class="fa fa-lock text-success"></i> Pembayaran Aman Midtrans
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center">
+                <p style="margin: 0;">&copy; {{ date('Y') }} Toko Online Makanan Nusantara. All rights reserved.</p>
             </div>
         </div>
-        <!-- /container -->
-    </div>
-    <!-- /NAVIGATION -->
-
-    @if (request()->segment(1) == '' || request()->segment(1) == 'beranda')
-        <!-- HOME -->
-        <div id="home">
-            <!-- container -->
-            <div class="container">
-                <!-- home wrap -->
-                <div class="home-wrap">
-                    <!-- home slick -->
-                    <div id="home-slick">
-                        <!-- banner -->
-                        <div class="banner banner-1">
-                            <img src="{{ asset('frontend/banner/banner01.jpg') }}" alt="">
-                            <div class="banner-caption text-center">
-                                <h1>Jajanan Tradisional</h1>
-                                <h3 class="font-weak" style="color: 30323a;">Khas Makanan Indonesia</h3>
-                                <a href="{{ route('produk.all') }}" class="primary-btn">Pesan Sekarang</a>
-                            </div>
-                        </div>
-                        <!-- /banner -->
-
-                        <!-- banner -->
-                        <div class="banner banner-1">
-                            <img src="{{ asset('frontend/banner/banner02.jpg') }}" alt="">
-                            <div class="banner-caption">
-                                <h1 class="primary-color">Khas Makanan Indonesia<br><span
-                                        class="white-color font-weak">Jajanan Tradisional</span></h1>
-                                <a href="{{ route('produk.all') }}" class="primary-btn">Pesan Sekarang</a>
-                            </div>
-                        </div>
-                        <!-- /banner -->
-
-                        <!-- banner -->
-                        <div class="banner banner-1">
-                            <img src="{{ asset('frontend/banner/banner03.jpg') }}" alt="">
-                            <div class="banner-caption">
-                                <h1 style="color: f8694a;">Khas Makanan<span>Indonesia</span>
-                                </h1>
-                                <a href="{{ route('produk.all') }}" class="primary-btn">Pesan Sekarang</a>
-                            </div>
-                        </div>
-                        <!-- /banner -->
-                    </div>
-                    <!-- /home slick -->
-                </div>
-                <!-- /home wrap -->
-            </div>
-            <!-- /container -->
-        </div>
-        <!-- /HOME -->
-    @endif
-
-    <!-- section -->
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- ASIDE -->
-                <div id="aside" class="col-md-3">
-                    <!-- aside widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Produk teratas</h3>
-                        <!-- widget product -->
-                        <div class="product product-widget">
-                            <div class="product-thumb">
-                                <img src="{{ asset('frontend/banner/banner03.jpg') }}" alt="">
-                            </div>
-                            <div class="product-body">
-                                <h2 class="product-name"><a href="#">Mochi</a></h2>
-                                <h3 class="product-price">Rp. 15.000 <del class="product-old-price">Rp. 30.000</del>
-                                </h3>
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /widget product -->
-
-                        <!-- widget product -->
-                        <div class="product product-widget">
-                            <div class="product-thumb">
-                                <img src="{{ asset('frontend/banner/banner01.jpg') }}" alt="">
-                            </div>
-                            <div class="product-body">
-                                <h2 class="product-name"><a href="#">bronis</a></h2>
-                                <h3 class="product-price">Rp. 30.000</h3>
-                                <div class="product-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star-o empty"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /widget product -->
-                    </div>
-                    <!-- /aside widget -->
-                    <!-- aside widget -->
-                    <div class="aside">
-                        <h3 class="aside-title">Filter Kategori</h3>
-                        <ul class="list-links">
-                            @foreach ($kategori as $row)
-                                <li><a href="{{ route('produk.kategori', $row->id) }}">{{ $row->nama_kategori }}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <!-- /aside widget -->
-                </div>
-                <!-- /ASIDE -->
-
-                <!-- MAIN -->
-                <div id="main" class="col-md-9">
-                    <!-- store top filter -->
-                    <!-- /store top filter -->
-
-                    <!-- @yieldAwal -->
-                    @yield('content')
-                    <!-- @yieldAkhir-->
-
-                    <!-- store bottom filter -->
-
-                    <!-- /store bottom filter -->
-                </div>
-                <!-- /MAIN -->
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
-    </div>
-    <!-- /section -->
-
-    <!-- FOOTER -->
-    <footer id="footer" class="section section-grey">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- footer widget -->
-                <div class="col-md-3 col-sm-6 col-xs-6">
-                    <div class="footer">
-                        <!-- footer logo -->
-                        <div class="footer-logo">
-                            <a class="logo" href="#">
-                                <img src="{{ asset('frontend/img/logo.png') }}" alt="">
-                            </a>
-                        </div>
-                        <!-- /footer logo -->
-
-                        <p>Mata Kuliah Web Programing III</p>
-
-                        <!-- footer social -->
-                        <ul class="footer-social">
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                        </ul>
-                        <!-- /footer social -->
-                    </div>
-                </div>
-                <!-- /footer widget -->
-
-                <!-- footer widget -->
-                <div class="col-md-3 col-sm-6 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-header">Akun Saya</h3>
-                        <ul class="list-links">
-                            <li><a href="#">Akun Saya </a></li>
-                            <li><a href="#">Keinginan Saya</a></li>
-                            <li><a href="#">Banding</a></li>
-                            <li><a href="#">Pembayaran</a></li>
-                            <li><a href="#">Masuk</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /footer widget -->
-
-                <div class="clearfix visible-sm visible-xs"></div>
-
-                <!-- footer widget -->
-                <div class="col-md-3 col-sm-6 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-header">Layanan Pelangan</h3>
-                        <ul class="list-links">
-                            <li><a href="#">Tentang Kita</a></li>
-                            <li><a href="#">Pengiriman & Pengembalian</a></li>
-                            <li><a href="#">Cara Pengiriman</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /footer widget -->
-
-                <!-- footer subscribe -->
-                <div class="col-md-3 col-sm-6 col-xs-6">
-                    <div class="footer">
-                        <h3 class="footer-header">Tetap Terhubung</h3>
-                        <p>Nama : Abni Basit Munawar<br>
-                            Kelas : 19.4A.07<br>
-                            Nim : 19230093</p>
-                        <form>
-                            <div class="form-group">
-                                <input class="input" placeholder="Masukan Email Anda">
-                            </div>
-                            <button class="primary-btn">Gabung </button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /footer subscribe -->
-            </div>
-            <!-- /row -->
-            <hr>
-            <!-- row -->
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 text-center">
-                    <!-- footer copyright -->
-                    <div class="footer-copyright">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;
-                        <script>
-                            document.write(new Date().getFullYear());
-                        </script> All rights reserved | This template ini di buat oleh <i
-                            class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                            target="_blank">Abni Basit Munawar</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                    <!-- /footer copyright -->
-                </div>
-            </div>
-            <!-- /row -->
-        </div>
-        <!-- /container -->
     </footer>
-    <!-- /FOOTER -->
 
-    <!-- jQuery Plugins -->
+    <!-- Scripts -->
     <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/slick.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/nouislider.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/jquery.zoom.min.js') }}"></script>
-    <script src="{{ asset('frontend/js/main.js') }}"></script>
-
 </body>
 
 </html>

@@ -8,7 +8,7 @@
                 <h5 class="card-title"> {{ $judul }} <br><br></h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('customer.update', $customer->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('backend.customer.update', $customer->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 

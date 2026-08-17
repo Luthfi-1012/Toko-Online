@@ -98,39 +98,31 @@ class OrderController extends Controller
     {  
         // Mendapatkan customer berdasarkan user yang login 
         $customer = Customer::where('user_id', Auth::id())->first(); 
+
+        if (!$customer) {
+            $customer = Customer::create(['user_id' => Auth::id()]);
+        }
  
         // Pastikan order dengan status 'pending' ada untuk customer ini 
         $order = Order::where('customer_id', $customer->id)->where('status', 'pending')->first(); 
  
         // Cek apakah order ada 
-        if (!$order) { 
+        if (!$order || $order->orderItems->count() == 0) { 
             return redirect()->route('order.cart')->with('error', 'Keranjang belanja kosong.'); 
         } 
  
         // Pastikan orderItems sudah dimuat menggunakan eager loading 
         $order->load('orderItems.produk'); 
+
+        $totalHarga = 0;
+        $totalBerat = 0;
+        foreach ($order->orderItems as $item) {
+            $totalHarga += $item->harga * $item->quantity;
+            $totalBerat += ($item->produk->berat ?? 0) * $item->quantity;
+        }
  
-        // Lanjutkan ke view jika order ada 
-        return view('v_order.select_shipping', compact('order')); 
-        
-    // $customer = Customer::where('user_id', Auth::id())->first(); 
-    // $order = Order::where('customer_id', $customer->id)->where('status', 'pending')->first(); 
-
-    // if (!$order || $order->orderItems->count() == 0) { 
-    //     return redirect()->route('order.cart')->with('error', 'Keranjang belanja kosong.'); 
-    // }
-
-    // $order->load('orderItems.produk');
-
-    // $totalHarga = 0;
-    // $totalBerat = 0;
-
-    // foreach ($order->orderItems as $item) {
-    //     $totalHarga += $item->harga * $item->quantity;
-    //     $totalBerat += $item->produk->berat * $item->quantity;
-    // }
-
-    // return view('v_order.select_shipping', compact('order', 'totalHarga', 'totalBerat')); 
+        // Lanjutkan ke view dengan data order, totalHarga, dan totalBerat
+        return view('v_order.select_shipping', compact('order', 'totalHarga', 'totalBerat')); 
     } 
  
     public function updateongkir(Request $request) 
@@ -295,20 +287,14 @@ class OrderController extends Controller
     { 
         $order = Order::findOrFail($id); 
         $rules = [ 
+            'status' => 'required',
             'alamat' => 'required', 
+            'noresi' => 'nullable|string',
+            'pos' => 'nullable|string',
         ]; 
-        if ($request->status != $order->status) { 
-            $rules['status'] = 'required'; 
-        } 
-        if ($request->noresi != $order->noresi) { 
-            $rules['noresi'] = 'required'; 
-        } 
-        if ($request->pos != $order->pos) { 
-            $rules['pos'] =  'required';
-        } 
         $validatedData = $request->validate($rules); 
-        Order::where('id', $id)->update($validatedData); 
-        return redirect()->route('pesanan.proses')->with('success', 'Data berhasil diperbaharui'); 
+        $order->update($validatedData); 
+        return redirect()->route('backend.pesanan.proses')->with('success', 'Data pesanan berhasil diperbarui'); 
     }
     
     // di App\Http\Controllers\OrderController

@@ -11,10 +11,50 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('backend/image/icon_univ_bsi.png') }}">
     <title>tokoonline</title>
+    <!-- Google Font Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/extra-libs/multicheck/multicheck.css') }}">
     <link href="{{ asset('backend/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/dist/css/style.min.css') }}" rel="stylesheet">
+    
+    <style>
+        body, .page-wrapper, .left-sidebar, .sidebar-nav, .card, table {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+        .left-sidebar {
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+        }
+        .sidebar-nav ul .sidebar-item .sidebar-link {
+            border-radius: 8px;
+            margin: 2px 10px;
+            padding: 10px 14px;
+            font-weight: 600;
+            font-size: 13.5px;
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav ul .sidebar-item.selected > .sidebar-link,
+        .sidebar-nav ul .sidebar-item .sidebar-link:hover {
+            background: #059669 !important;
+            color: #ffffff !important;
+        }
+        .sidebar-nav ul .sidebar-item.selected > .sidebar-link i,
+        .sidebar-nav ul .sidebar-item .sidebar-link:hover i {
+            color: #ffffff !important;
+        }
+        .card {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .btn {
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -135,9 +175,12 @@
                                 <a class="dropdown-item" href="{{ route('backend.user.edit', Auth::user()->id) }}">
                                     <i class="ti-user m-r-5 m-l-5"></i> Profil Saya
                                 </a>
-                                <a class="dropdown-item" href="" onclick="event.preventDefault(); document.getElementById('keluar-app').submit();">
-                                    <i class="fa fa-power-off m-r-5 m-l-5"></i> Keluar
+                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('keluar-app').submit();">
+                                    <i class="fa fa-power-off m-r-5 m-l-5 text-danger"></i> Keluar
                                 </a>
+                                <form id="keluar-app" action="{{ route('backend.logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
                                 <div class="dropdown-divider"></div>
                             </div>
                         </li>
@@ -174,10 +217,14 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('backend.pesanan.proses') }}" aria-expanded="false"><i class="mdi mdi-cart"></i><span class="hide-menu">Pesanan</span></a>
+                        </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Laporan </span></a>
                             <ul aria-expanded="false" class="collapse first-level">
                                 <li class="sidebar-item"><a href="{{ route('backend.laporan.formuser') }}" class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu"> User </span></a></li>
                                 <li class="sidebar-item"><a href="{{ route('backend.laporan.formproduk') }}" class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu"> Produk </span></a></li>
+                                <li class="sidebar-item"><a href="{{ route('backend.laporan.formproses') }}" class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu"> Pesanan Proses </span></a></li>
+                                <li class="sidebar-item"><a href="{{ route('backend.laporan.formselesai') }}" class="sidebar-link"><i class="mdi mdi-chevron-right"></i><span class="hide-menu"> Pesanan Selesai </span></a></li>
                             </ul>
                         </li>
                     </ul>

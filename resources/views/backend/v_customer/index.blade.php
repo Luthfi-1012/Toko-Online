@@ -24,13 +24,13 @@
                                 <td> {{$row->user->nama}} </td>
                                 <td> {{$row->user->email}} </td>
                                 <td>
-                                    <a href="{{ route('customer.show', $row->id) }}" title="Ubah Data">
+                                    <a href="{{ route('backend.customer.show', $row->id) }}" title="Detail Data">
                                     <button type="button" class="btn btn-warning btn-sm"><i class="fas fa-eye"></i> Detail</button>
                                     </a>
-                                    <a href="{{ route('customer.edit', $row->id) }}" title="Ubah Data">
+                                    <a href="{{ route('backend.customer.edit', $row->id) }}" title="Ubah Data">
                                         <button type="button" class="btn btn-cyan btn-sm"><i class="far fa-edit"></i> Ubah</button>
                                     </a>
-                                    <form method="POST" action="{{ route('customer.destroy', $row->id) }}" style="display:inline-block;">
+                                    <form method="POST" action="{{ route('backend.customer.destroy', $row->id) }}" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm show_confirm" data-konf-delete="{{ $row->user->nama }}">
