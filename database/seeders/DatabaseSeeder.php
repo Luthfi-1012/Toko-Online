@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         $admin = User::updateOrCreate(
             ['email' => 'admin@gmail.com'],
             [
-                'nama' => 'Administrator Abni',
+                'nama' => 'Administrator Luthfi',
                 'role' => '1',
                 'status' => 1,
                 'hp' => '0812345678901',
@@ -39,9 +39,9 @@ class DatabaseSeeder extends Seeder
         );
 
         $staff = User::updateOrCreate(
-            ['email' => 'abni@gmail.com'],
+            ['email' => 'luthfi@gmail.com'],
             [
-                'nama' => 'niee',
+                'nama' => 'Luthfi',
                 'role' => '0',
                 'status' => 1,
                 'hp' => '081234567892',
