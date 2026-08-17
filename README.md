@@ -233,7 +233,7 @@ Setelah menjalankan `php artisan migrate --seed`, akun berikut siap digunakan:
 | :--- | :--- | :--- | :--- |
 | **Super Admin** | `admin@gmail.com` | `bsi06` | `/backend/login` |
 | **Admin Toko** | `oke@gmail.com` | `bsi06` | `/backend/login` |
-| **Staff Admin** | `abni@gmail.com` | `farhan123` | `/backend/login` |
+| **Staff Admin** | `luthfi@gmail.com` | `farhan123` | `/backend/login` |
 | **Customer Demo** | `customer@gmail.com` | `password123` | SSO via Google atau Auth |
 
 ---
